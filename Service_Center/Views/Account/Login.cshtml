@@ -1,0 +1,256 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/assests/js/jquery.min.js"></script>
+<style>
+     .logerror{
+                top:0;
+                background-color:#ad2121;
+                width:350px;
+                height:60px;
+                margin-left:500px;
+                box-shadow:5px 18px 10px -7px #b3b0b0;
+                border-radius:5px 5px 5px 5px;
+                display: none;
+                text-align:center;
+                position: fixed;
+                z-index: 30001;
+                 color:#fff;
+            }
+       .reqLogError{
+                color:red;
+                font-size:14px;
+                font-family:'Times New Roman', Times, serif;
+                font-weight:100;
+
+            }
+</style>
+<section class="content">
+    <div id="err_error" class="logerror">
+        <label id="lblerror" style="margin:5% 0 0 0"> </label>
+    </div>
+    <div class="container LogContainer">
+        <h2 id="Log_resg">Login</h2>
+
+        <form id="LogIn">
+            <div class="form-group row">
+                <div id="divLoginF" class="col-md-6">
+                    <div class="form-group">
+                        <div>
+                            <label>Username</label>
+                            <input type="email" name="uname" id="txtusername" class="form-control" placeholder="Enter Your Email-ID" required />
+                            <label class="reqLogError" id="lblerrorUsername"></label>
+                        </div>
+                        <div>
+                            <label>Password</label>
+                            <input type="password" name="passwd" id="txtpassword" class="form-control" placeholder="Enter Your Password" required />
+                            <label class="reqLogError" id="lblerrorPassword"></label>
+                        </div>
+                    </div>
+                        <div class="form-group row">
+                            <div class="col-md-6"><input id="btnlogin" class="btn btn_login" type="submit" value="Log in"></div>
+                            <div class="col-md-6"><div class="Anchor-Create-acc"><label>Don't have an account? </label><a href="#" id="CreateAcc" onclick="change(this.id)">Sign Up</a></div></div>
+                        </div>
+                    </div>
+                <div class="col-md-6">
+                    <img src="~/assests/images/pngkey.com-business-people-sitting-png-1304494.png" />
+                </div>
+            </div>
+        </form>
+        <form id="register">
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <label class="reqLogError" id="lblerrorPassword"></label>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label>Email *</label>
+                            <input type="email" name="uname" id="txt_usernme" class="form-control" autocomplete="off" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label>Password *</label>
+                            <input type="password" name="passwd" id="txt_passwrd" class="form-control" autocomplete="off" required />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label>Name *</label>
+                            <input type="text" name="name" id="txt_name" class="form-control" autocomplete="off" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label>Contact *</label>
+                            <input type="text" name="Contact" id="txt_Contact" onkeypress="return isNumberKey(event)" maxlength="10" autocomplete="off" class="form-control" required />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-8">
+                            <label>Address *</label>
+                            <textarea id="txt_Address" class="form-control no-resize" name="Address" cols="10" rows="4" autocomplete="off" placeholder="Address ..... !!" required></textarea>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Pin Code *</label>
+                            <input type="text" name="pincode" id="txtPincode" class="form-control" maxlength="6" onkeypress="return isNumberKey(event)" autocomplete="off" required />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6"><input id="btnsignup" class="btn btn_login" type="submit" value="Sign Up"></div>
+                        <div class="col-md-6"><div class="Anchor-Create-acc"><label>Already have an account? </label><a href="#" id="Id_A_login" onclick="change(this.id)">Log in</a></div></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <img src="~/assests/images/pngkey.com-business-people-sitting-png-1304494.png" />
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</section>
+<script>
+    $(function () {
+      
+        $('#register').hide();
+    })
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 46 || charCode > 57))
+            return false;
+
+        return true;
+    }
+    function change(id) {
+     
+        if (id == 'CreateAcc') {
+            $('#register').show();
+            $('#LogIn').hide();
+            $('#Log_resg').html('Sign Up')
+        }
+        else if (id == 'Id_A_login') {
+            $('#register').hide();
+            $('#LogIn').show();
+            $('#Log_resg').html('Login')
+        }
+
+    }
+    $('#btnlogin').on('click', function () {
+        
+        if ($('#txtusername').val() == '' && $('#txtpassword').val() == '') {
+            $('#lblerrorUsername').html("Please enter your username")
+            $('#lblerrorPassword').html("Please enter your password")
+        } else if ($('#txtusername').val() == '') {
+            $('#lblerrorPassword').html('')
+            $('#lblerrorUsername').html("Please enter your username")
+            event.preventDefault();
+        }
+        else if ($('#txtpassword').val() == '')
+        {
+            $('#lblerrorPassword').html("Please enter your password")
+            $('#lblerrorUsername').html('')
+            event.preventDefault();
+        }
+        else {
+            
+            $('#lblerrorUsername').html('')
+            $('#lblerrorPassword').html('')
+            var isValidCheck = $('#LogIn')[0].checkValidity();
+            if (isValidCheck) {
+                
+                event.preventDefault();
+                    var t = {
+                        "Email": $('#txtusername').val(),
+                        "Password": $('#txtpassword').val(),
+                    }
+                $.ajax({
+                    type: "Post",
+                    url: "/Account/Login",
+                    crossDomain: false,
+                    data: JSON.stringify(t),
+                    contentType: "application/json",
+                    dataType: "Json",
+                    async: true,
+                    success: function (responce) {
+                        
+                        console.log(responce);
+                        if (responce.returnurl != null && responce.returnurl != '') {
+                            var a = "../../" + responce.returnurl;
+                            window.location.replace(a);
+                        }
+                        else {
+                            $("#err_error").fadeIn();
+                            $('#lblerror').html(responce.Description);
+                            $("#err_error").fadeOut(1800);
+                        }
+
+                    },
+                    failure: function () {
+                        alert(responce.Description);
+                        // alert("Error");
+                    }
+                });
+            }
+        }
+    })
+
+    $('#btnsignup').on('click', function () {
+        
+        var eml, pass, nme, cont, addr, pinc;
+        eml = $('#txt_usernme').val();
+        pass = $('#txt_passwrd').val();
+        nme = $('#txt_name').val();
+        cont = $('#txt_Contact').val();
+        addr = $('#txt_Address').val();
+        pinc = $('#txtPincode').val();
+        if (eml != '' && pass != '' && nme != '' && cont != '' && addr != '' && pinc != '') {
+            $('#lblerrorUsername').html('')
+            var isValidCheck = $('#register')[0].checkValidity();
+            if (isValidCheck) {
+                
+                event.preventDefault();
+                var t = {
+                    "Email": eml,
+                    "Password": pass,
+                    "Name": nme,
+                    "Contact": cont,
+                    "Address": addr,
+                    "Pin_Code": pinc,
+                }
+                $.ajax({
+                    type: "Post",
+                    url: "/Customer/UserRegistration/Sign_Up",
+                    crossDomain: false,
+                    data: JSON.stringify(t),
+                    contentType: "application/json",
+                    dataType: "Json",
+                    // async: false,
+                    success: function (responce) {
+                        alert(responce.Description);
+                        clearSignUpFields();
+                    },
+                    failure: function () {
+                        alert(responce.Description);
+                        clearSignUpFields();
+                        // alert("Error");
+                    }
+                });
+
+            }
+        }
+        else {
+            //$('#lblerrorUsername').html("All * fields are mandatory");
+            alert("All * fields are mandatory");
+        }
+
+    })
+
+    function clearSignUpFields() {
+         $('#txt_usernme').val('');
+         $('#txt_passwrd').val('');
+         $('#txt_name').val('');
+         $('#txt_Contact').val('');
+         $('#txt_Address').val('');
+         $('#txtPincode').val('');
+    }
+</script>
+

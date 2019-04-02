@@ -1,0 +1,347 @@
+﻿
+@{
+    ViewBag.Title = "Engineers";
+    Layout = "~/Views/Shared/AdminView.cshtml";
+}
+
+@*<script src="~/assests/js/jquery.min.js"></script>*@
+<script type="text/javascript"
+        src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js">
+</script>
+<section class="page_breadcrumbs ds background_cover overlay_color section_padding_top_75 section_padding_bottom_65">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <h2>Engineers</h2>
+                <ol class="breadcrumb greylinks">
+                    <li>
+                        <a href="/Home/Admin_Index">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="active">Engineers </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="page-body clearfix">
+        <div class="panel panel-default panel-collapse">
+            <div class="panel-body">
+                <form id="form_basic_validation" class="sli">
+                    <input id="EditID" type="hidden" />
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label>* Engineer Name :</label>
+                            <input id="txt_EngName" type="text" class="form-control" autocomplete="off" name="EngName" placeholder="Enter Engineer Name" required />
+                        </div>
+                        <div class="col-sm-3">
+                            <label>* Contact No. :</label>
+                            <input id="txt_ContactNO" type="text" class="form-control" autocomplete="off" name="ZoneCode" onkeypress="return isNumberKey(event)" placeholder="Enter Contact Number " required />
+                        </div>
+                        <div class="col-sm-2">
+                            <label> Gender :</label>
+                            <select id="dd_Gender" name="ddGender" class="form-control">
+                                <option value="">--Select--</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>* Experience :</label>
+                            <select id="dd_Experience" name="ddExperience" class="form-control" required>
+                                <option value="">--Select--</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>* Date of Joining :</label>
+                            <input id="txt_DateofJoin" type="text" class="form-control" onkeypress="return isNumberKey(event)" autocomplete="off" name="DoP" placeholder="Date of Purchase " required />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12"><input id="btnSave" class="btn" type="submit" value="ADD"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="page-body clearfix">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <div class="row" style="margin-left: 5px; margin-right: 5px;display: block;">
+                            <div class="table-responsive" style="overflow-x:hidden">
+                                <table id="tblEngineers" class="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <td>#</td>
+                                            <th>Eng. Name</th>
+                                            <th>Eng. Contact</th>
+                                            <th>Gender</th>
+                                            <th>Experience</th>
+                                            <th>Date of Joining</th>
+                                            <th>Update</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tblEngineersBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(function () {
+        LoadGender();
+        LoadExperience();
+        GetEnginners();
+        $('#txt_DateofJoin').datepicker({
+            dateFormat: "dd-M-yy",
+            yearRange: "-100:+0",
+            inline: true,
+            showAnim: 'fadeIn',
+            changeMonth: true,
+            changeYear: true,
+        });
+    })
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 46 || charCode > 57))
+            return false;
+
+        return true;
+    }
+    function LoadGender(ReqTypeId) {
+
+        var t = {
+            "action": "Gender"
+        }
+        $.ajax({
+            type: "POST",
+            url: "/admin/Engineers/Gender_list",
+            crossDomain: false,
+            data: JSON.stringify(t),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (responce) {
+
+                var res = responce.data;
+              
+                var list = "";
+                list += '<option value="">--Select--</option>';
+                var id;
+                for (var i = 0; i < res.length; i++) {
+
+                    list += '<option value="' + res[i].ID + '">' + res[i].gender + '</option>';
+                }
+                $('#dd_Gender').html(list);
+                if (ReqTypeId != undefined && ReqTypeId != null && ReqTypeId != '') {
+                    $('#dd_Gender').val(ReqTypeId);
+                }
+
+            },
+            failure: function (responce) {
+                alert(responce.alert);
+
+            }
+        });
+    }
+    function LoadExperience(ReqTypeId) {
+
+        var t = {
+            "action": "Experience"
+        }
+        $.ajax({
+            type: "POST",
+            url: "/admin/Engineers/Experience_list",
+            crossDomain: false,
+            data: JSON.stringify(t),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (responce) {
+
+                var res = responce.data;
+               
+                var list = "";
+                list += '<option value="">--Select--</option>';
+                var id;
+                for (var i = 0; i < res.length; i++) {
+
+                    list += '<option value="' + res[i].ID + '">' + res[i].experience + '</option>';
+                }
+                $('#dd_Experience').html(list);
+                if (ReqTypeId != undefined && ReqTypeId != null && ReqTypeId != '') {
+                    $('#dd_Experience').val(ReqTypeId);
+                }
+
+            },
+            failure: function (responce) {
+                alert(responce.alert);
+
+            }
+        });
+    }
+    function GetEnginners() {
+        var t = {
+            "action": "Select"
+        }
+        $.ajax({
+            type: "POST",
+            url: "/admin/Engineers/enginners_list",
+            contentType: "application/json",
+            data: JSON.stringify(t),
+            dataType: "json",
+            success: function (responce) {
+                getdata = responce.data;
+                var list;
+                $("#tblEngineers").dataTable().fnDestroy();
+                $("#tblEngineersBody").empty();
+                for (var i = 0; i < getdata.length; i++) {
+                    list = "";
+                    list += '<tr>'
+                    list += '<td>' + (i + 1) + ''
+                    list += '</td>'
+                    list += '<td>' + getdata[i].e_name + ''
+                    list += '</td>'
+                    list += '<td>' + getdata[i].contact + ''
+                    list += '</td>'
+                    list += '<td>' + getdata[i].gender + ''
+                    list += '</td>'
+                    list += '<td>' + getdata[i].E_Experience + ''
+                    list += '</td>'
+                    list += '<td>' + getdata[i].D_OF_J + ''
+                    list += '</td>'
+                    list += '<td><a id="' + getdata[i].Id + '" style="cursor: pointer"  title="Edit" onclick="LoadProfile(this.id)"><i class="fa fa-pencil-square-o" style="font-size:30px;color:#16a085;" aria-hidden="true"></i></a></td>'
+                    list += '<td><a id="' + getdata[i].Id + '" style="cursor: pointer"  title="Delete" onclick="DeleteProfile(this.id)"><i class="fa fa-trash" style="font-size:30px;color:#16a085;" aria-hidden="true"></i></a></td>'
+                    list += '</tr>'
+                    $("#tblEngineersBody").append(list);
+                }
+
+
+                $('#tblEngineers').dataTable({
+                    responsive: true
+                });
+            },
+            error: function (responce) {
+            }
+        });
+    }
+    function LoadProfile(ReqID) {
+        debugger;
+        var t = {
+            "Id": ReqID
+        }
+        $.ajax({
+            type: "POST",
+            url: "/admin/Engineers/enginners_listByID",
+            contentType: "application/json",
+            data: JSON.stringify(t),
+            dataType: "json",
+            success: function (responce) {
+                debugger;
+                var res = responce.data
+
+                $('#txt_EngName').val(res[0].e_name);
+                $('#txt_ContactNO').val(res[0].contact);
+                LoadGender(res[0].gender_id);
+                LoadExperience(res[0].Exp_id);
+                $('#txt_DateofJoin').val(res[0].D_OF_J);
+                $('#EditID').val(res[0].Id);
+                $('#btnSave').val("Update");
+
+            },
+            error: function (responce) {
+            }
+        });
+    }
+    function DeleteProfile(ReqID) {
+        var t = {
+            "Id": ReqID
+        }
+        $.ajax({
+            type: "POST",
+            url: "/admin/Engineers/Delete_enginners",
+            contentType: "application/json",
+            data: JSON.stringify(t),
+            dataType: "json",
+            success: function (responce) {
+                debugger;
+               responce.Description
+               if (responce.Description = 'OK') {
+                   alert("Delete Successfully");
+                   GetEnginners();
+               }
+            },
+            error: function (responce) {
+            }
+        });
+    }
+    $('#btnSave').on('click', function () {
+        debugger;
+        var enm, econ, gen, exp, doj
+        enm = $('#txt_EngName').val();
+        econ =$('#txt_ContactNO').val();
+        gen =$('#dd_Gender').val();
+        exp = $('#dd_Experience').val();
+        doj = $('#txt_DateofJoin').val();
+        if (enm != '' && econ != '' && gen != '' && exp != '' && doj != '') {
+            var isCheck = $('#form_basic_validation')[0].checkValidity();
+            var t, uri;
+            if (isCheck) {
+                if ($('#btnSave').val() == "ADD") {
+
+                    t = {
+                        "e_name": enm,
+                        "contact": econ,
+                        "gender_id": gen,
+                        "Exp_id": exp,
+                        "D_OF_J": doj,
+                    }
+                    uri = "/admin/Engineers/Add_enginners";
+
+                } else {
+                    t = {
+                        "Id": parseInt($('#EditID').val()),
+                        "e_name": enm,
+                        "contact": econ,
+                        "gender_id": gen,
+                        "Exp_id": exp,
+                        "D_OF_J": doj,
+                    }
+                    uri = "/admin/Engineers/Update_enginners";
+                }
+                $.ajax({
+                    type: "POST",
+                    url: uri,
+                    crossDomain: false,
+                    data: JSON.stringify(t),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (responce) {
+                        debugger;
+                        alert(responce.Description);
+                        GetEnginners();
+                            if ($('#btnSave').val() == "Update") {
+                                $('#btnSave').val("ADD");
+                        }
+                    },
+                    failure: function (responce) {
+                        alert(responce.Description);
+
+                    }
+                });
+
+
+            }
+        } else {
+            alert("Please Fill * Fields");
+        }
+
+    })
+    </script>

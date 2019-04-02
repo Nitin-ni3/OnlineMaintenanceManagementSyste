@@ -1,0 +1,212 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>E-Service Center</title>
+    <meta charset="utf-8">
+    <!--[if IE]>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <![endif]-->
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <link rel="stylesheet" href="~/assests/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/assests/css/animations.css">
+    <link rel="stylesheet" href="~/assests/css/fonts.css">
+    <link href="~/assests/css/CustomeStyle.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="~/assests/css/main.css" class="color-switcher-link">
+    <link rel="stylesheet" href="~/assests/css/shop.css" class="color-switcher-link">
+    <script src="~/assests/js/vendor/modernizr-2.6.2.min.js"></script>
+    <script src="~/assests/js/jquery.min.js"></script>
+    <script src="~/assests/js/jquery-ui.js"></script>
+    <!--[if lt IE 9]>
+        <script src="js/vendor/html5shiv.min.js"></script>
+        <script src="js/vendor/respond.min.js"></script>
+        <script src="js/vendor/jquery-1.12.4.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <!--[if lt IE 9]>
+        <div class="bg-danger text-center">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/" class="highlight">upgrade your browser</a> to improve your experience.</div>
+    <![endif]-->
+    <div class="preloader">
+        <div class="preloader_image"></div>
+    </div>
+    <!-- search modal -->
+    <div class="modal" tabindex="-1" role="dialog" aria-labelledby="search_modal" id="search_modal">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">
+                <i class="rt-icon2-cross2"></i>
+            </span>
+        </button>
+        <div class="widget widget_search">
+            <form method="get" class="searchform search-form form-inline" action="http://webdesign-finder.com/html/fixetics/">
+                <div class="form-group bottommargin_0"> <input type="text" value="" name="search" class="form-control" placeholder="Search keyword" id="modal-search-input"> </div> <button type="submit" class="theme_button no_bg_button">Search</button>
+            </form>
+        </div>
+    </div>
+    <!-- Unyson messages modal -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="messages_modal">
+        <div class="fw-messages-wrap ls with_padding">
+            <!-- Uncomment this UL with LI to show messages in modal popup to your user: -->
+            <!--
+            <ul class="list-unstyled">
+                <li>Message To User</li>
+            </ul>
+            -->
+        </div>
+    </div>
+    <!-- eof .modal -->
+    <!-- wrappers for visual page editor and boxed version of template -->
+    <div id="canvas">
+        <div id="box_wrapper">
+            <!-- template sections -->
+            <section class="ls page_toplogo section_padding_lg_25 columns_padding_5">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-6 col-xxs-12 col-lg-3 text-center text-sm-left">
+                            <a href="/Home/Index" class="logo logo_with_text">
+                                <img src="~/assests/images/logo2.png" alt="">
+                                <span class="logo_text">
+                                    <span class="big highlight">E-Service Center</span>
+                                    Appliance Installation<br> and Maintenance
+                                </span>
+                            </a>
+                        </div>
+                        <div class="col-xs-6 col-xxs-12 col-lg-3 col-lg-push-6 text-right text-xxs-center"><h6 style="margin:0 0 0 -10%">Welcome :@Session["Name"]</h6> </div>
+                        <div class="col-lg-6 col-lg-pull-3 col-xs-12">
+                            <div class="teasers-row">
+                                @*<div class="teaser icon-bg-teaser text-center"> <i class="fa fa-phone icon-background small"></i> Call Us 24/7 <br> <strong class="highlight2 big">0-800-478-3421</strong> </div>
+                                <div class="teaser icon-bg-teaser text-center"> <i class="fa fa-map-marker icon-background small"></i> 158 Balm Street <br> <strong class="highlight2 big">Eastern Hill, CA</strong> </div>
+                                <div class="teaser icon-bg-teaser text-center"> <i class="fa fa-clock-o icon-background small"></i> Working Hours <br> <strong class="highlight2 big">8:00am – 8:00pm</strong> </div>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <header class="page_header header_white relative_toggler">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <!-- main nav start -->
+                            <nav class="mainmenu_wrapper">
+                                <ul class="mainmenu nav sf-menu">
+                                    <li class="active">
+                                        <a href="/Home/Admin_Index">Dashboard</a>
+                                    </li>
+                                   
+                                    <!-- eof pages -->
+                              
+                                    <li id="">
+                                        <a href="/admin/Admin/Follow_up">Follow-Ups</a>
+                                    </li>
+                                    <li id="">
+                                        <a href="/admin/Admin/Engineers">Engineers</a>
+                                    </li>
+                                    <!-- shop -->
+                                    <li id="liLogOut" style="float:right">
+                                        <a href="/admin/Admin/AdminLogout"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a>
+                                    </li>
+                                    <!-- eof shop -->
+                                    <!-- contacts -->
+                                   
+                                    <!-- eof contacts -->
+                                </ul>
+                            </nav>
+                            <!-- eof main nav -->
+                            <!-- header toggler --><span class="toggle_menu"><span></span></span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+          
+            @RenderBody()
+            @*<footer class="page_footer ds background_cover overlay_color section_padding_top_150 section_padding_bottom_130 columns_padding_25 columns_margin_bottom_40">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-12 text-center">
+                            <div class="widget widget_text">
+                                <h3 class="widget-title">Contact Us</h3>
+                                <hr class="theme-divider color2">
+                                <ul class="list-unstyled greylinks">
+                                    <li class="media"> <i class="fa fa-map-marker highlight2 rightpadding_5" aria-hidden="true"></i> 158 Balm Street Eastern Hill, CA 10020 US </li>
+                                    <li class="media"> <i class="fa fa-clock-o highlight2 rightpadding_5" aria-hidden="true"></i> Working Hours 8:00am – 8:00pm </li>
+                                    <li class="media"> <i class="fa fa-pencil highlight2 rightpadding_5" aria-hidden="true"></i> <a href="mailto:Fixetics@example.com">Fixetics@example.com</a> </li>
+                                    <li class="media"> <i class="fa fa-phone highlight2 rightpadding_5" aria-hidden="true"></i> 0-800-478-3421 </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6 text-center">
+                            <div class="widget widget_text">
+                                <h3 class="widget-title">Fixetics</h3>
+                                <hr class="theme-divider color1">
+                                <p>Our company is always glad to you and help to cope in any situation with any appliance in such areas as Eastern Hill, Cozy Valley, Mountain Lake!</p>
+                                <p class="topmargin_30"> <a href="contact.html" class="theme_button color1">book online</a> </p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6 text-center">
+                            <div class="widget widget_recent_posts">
+                                <h3 class="widget-title">Latest News</h3>
+                                <hr class="theme-divider color2">
+                                <ul class="list-unstyled greylinks">
+                                    <li class="media">
+                                        <p> <a href="blog-single-left.html">Drumstick Picanha Pork Sausage Pork Loin Corned Beef Landjaeger.</a> </p> <span class="small-text highlight2links">
+                                            <a href="blog-single-left.html">
+                                                <time datetime="2017-10-03T08:50:40+00:00">
+                                                    11 jan, 2018
+                                                </time>
+                                            </a>
+                                        </span>
+                                    </li>
+                                    <li class="media">
+                                        <p> <a href="blog-single-left.html">T-bone Bacon Short Loin Beef Cupim Tongue Shankle Hamburger Frankfurter. </a> </p> <span class="small-text highlight2links">
+                                            <a href="blog-single-left.html">
+                                                <time datetime="2017-10-03T08:50:40+00:00">
+                                                    11 jan, 2018
+                                                </time>
+                                            </a>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>*@
+            <section class="ls page_copyright section_padding_top_15 section_padding_bottom_15">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <p class="small-text grey">&copy; Copyright 2018. All Rights Reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!-- eof #box_wrapper -->
+    </div>
+    <!-- eof #canvas -->
+    <script src="~/assests/js/compressed.js"></script>
+    <script src="~/assests/js/jquery.dataTables.js"></script>
+    <script src="~/assests/js/dataTables.bootstrap.js"></script>
+    <script src="~/assests/js/main.js"></script>
+    <script src="~/assests/js/jquery-ui.js"></script>
+    <!-- <script src="js/switcher.js"></script> -->
+</body>
+
+</html>
+@*<script>
+    $(function () {
+        debugger;
+        var getSessVal = '@Request.RequestContext.HttpContext.Session["LoginAs"]';
+        if(getSessVal=='Admin'){
+            alert("KK");
+        }
+    })
+</script>*@

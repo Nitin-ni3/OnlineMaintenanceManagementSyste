@@ -1,0 +1,293 @@
+﻿
+@{
+    ViewBag.Title = "Follow_up";
+    Layout = "~/Views/Shared/AdminView.cshtml";
+}
+@*<script src="~/assests/js/jquery.min.js"></script>*@
+<script type="text/javascript"
+        src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js">
+</script>
+<section class="page_breadcrumbs ds background_cover overlay_color section_padding_top_75 section_padding_bottom_65">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <h2>Follow-up</h2>
+                <ol class="breadcrumb greylinks">
+                    <li>
+                        <a href="/Home/Admin_Index">
+                            Home
+                        </a>
+                    </li>
+                    <li class="active">Follow-up </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="page-body clearfix">
+        <div class="panel panel-default panel-collapse">
+            <div class="panel-body">
+                <form id="form_basic_validation" class="sli">
+                    <input id="EditID" type="hidden" />
+                    <div class="form-group row">
+                        <div class="col-sm-2">
+                            <label>Appliance :</label>
+                            <select id="dd_Appliance" name="ddAppliance" class="form-control" required>
+                                <option value="">--Select--</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label>* Part Name :</label>
+                            <input id="txt_PartName" type="text" class="form-control" autocomplete="off" name="PartName" placeholder="Enter Part Name" required />
+                        </div>
+                        <div class="col-sm-3">
+                            <label> Serial No. :</label>
+                            <input id="txt_SerialNO" type="text" class="form-control" autocomplete="off" name="ZoneCode" placeholder="Enter Part Serial No. " required />
+                        </div>
+                        <div class="col-sm-2">
+                            <label> Price :</label>
+                            <input id="txt_Price" type="text" class="form-control" autocomplete="off" onkeypress="return isNumberKey(event)" name="Price" placeholder="Enter Price" />
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Date of Replace :</label>
+                            <input id="txt_DateofRep" type="text" class="form-control" onkeypress="return isNumberKey(event)" autocomplete="off" name="DoP" placeholder="Date of Purchase " required />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12"><input id="btnUpdate" class="btn" type="submit" value="Update"></div>
+                    </div>
+                  
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="page-body clearfix">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <div class="row" style="margin-left: 5px; margin-right: 5px;display: block;">
+                            <div class="table-responsive" style="overflow-x:hidden">
+                                <table id="tblAppointment"  class="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <td>#</td>
+                                            <th>Name</th>
+                                            <th>Contact</th>
+                                            <th>Product Comp.</th>
+                                            <th>Product Name</th>
+                                            <th>Price</th>
+                                            <th>Problem</th>
+                                            <th>Warranty Status</th>
+                                            <th>Status</th>
+                                            <th>Assigned Enginner</th>
+                                            <th>Update</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tblAppointmentBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<script>
+    $(function () {
+        $('#form_basic_validation').hide();
+        GetAppointmnet()
+        LoadApplinces();
+        $('#txt_DateofRep').datepicker({
+            dateFormat: "dd-M-yy",
+            yearRange: "-100:+0",
+            inline: true,
+            showAnim: 'fadeIn',
+            changeMonth: true,
+            changeYear: true,
+        });
+    })
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 46 || charCode > 57))
+            return false;
+
+        return true;
+    }
+    function GetAppointmnet() {
+        
+        var t = {
+            "action": "AllAppointment"
+        }
+        $.ajax({
+            type: "POST",
+            url: "/admin/Admin/GetAppointment_List",
+            contentType: "application/json",
+            data: JSON.stringify(t),
+            dataType: "json",
+            success: function (responce) {
+                
+                getdata = responce.data;
+                var list;
+                $("#tblAppointment").dataTable().fnDestroy();
+                $("#tblAppointmentBody").empty();
+                for (var i = 0; i < getdata.length; i++) {
+                    list = "";
+                    list += '<tr>'
+                    list += '<td>' + (i + 1) + ''
+                    list += '</td>'
+                    list += '<td>' + getdata[i].Name + ''
+                    list += '</td>'
+                    list += '<td>' + getdata[i].Contact + ''
+                    list += '</td>'
+                    list += '<td>' + getdata[i].Brand + ''
+                    list += '</td>'
+                    list += '<td>' + getdata[i].Product_Name + ''
+                    list += '</td>'
+                    list += '<td>' + getdata[i].Price + ''
+                    list += '</td>'
+                    list += '<td>' + getdata[i].Problem + ''
+                    list += '</td>'
+                    list += '<td>' + getdata[i].Warranty_Status + ''
+                    list += '</td>'
+                    if (getdata[i].status == true) {
+                        list += '<td> Pending'
+                    }
+                    else {
+                        list += '<td> Start'
+                    }
+                    if (getdata[i].Engineer_Name !='') {
+                        list += '<td>' + getdata[i].Engineer_Name + ''
+                    }
+                    else {
+                        list += '<td>    --'
+                    }
+              
+                    list += '</td>'
+                    list += '<td><a id="' + getdata[i].Id + '" style="cursor: pointer"  title="Edit" onclick="LoadDetailsProfile(this.id)"><i class="fa fa-pencil-square-o" style="font-size:30px;color:#16a085;" aria-hidden="true"></i></a></td>'
+                    list += '</tr>'
+
+
+
+
+                    $("#tblAppointmentBody").append(list);
+
+                    //else {
+                    //    $("#dataitem").append('<tr><td>' + (i + 1) + '</td><td>' + responce[i].ModuleName + '</td><td>' + responce[i].Description + '</td><td>' + responce[i].Icon + '</td><td><input id="' + responce[i].id + '" type="CheckBox" value="' + responce[i].Status + '" onclick="Active(this.id,this.value)" /></td><td>' + responce[i].DisplayOrder + '</td><td><input id="' + responce[i].id + '" type="button" value="Edit" onclick="Edit(this.id)" class="btn btn-default" /></td></tr>')
+                    //}
+                }
+
+
+                $('#tblAppointment').dataTable({
+                    responsive: true
+                });
+            },
+            error: function (responce) {
+            }
+        });
+    }
+    function LoadDetailsProfile(id, text) {
+        
+        $(".sli").show("slide", { direction: "right" }, 2000);
+        $('#EditID').val(id);
+      
+    }
+    function LoadApplinces(ReqTypeId) {
+        
+        var t = {
+            "action": "Select"
+        }
+        $.ajax({
+            type: "POST",
+            url: "/Customer/UserAction/GetApplinces",
+            crossDomain: false,
+            data: JSON.stringify(t),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (responce) {
+                
+                var res = responce.Data;
+                console.log(res);
+                var list = "";
+                list += '<option value="">--Select--</option>';
+                var id;
+                for (var i = 0; i < res.length; i++) {
+
+                    list += '<option value="' + res[i].id + '">' + res[i].Product_Name + '</option>';
+                }
+                $('#dd_Appliance').html(list);
+                if (ReqTypeId != undefined && ReqTypeId != null && ReqTypeId != '') {
+                    $('#dd_Appliance').val(ReqTypeId);
+                }
+
+            },
+            failure: function (responce) {
+                alert(responce.alert);
+
+            }
+        });
+    }
+    $('#btnUpdate').on('click', function () {
+        debugger;
+        var Pnme, apl, doR, srno, prc;
+        Pnme = $('#txt_PartName').val();
+        apl = $('#dd_Appliance').val();
+        doR = $('#txt_DateofRep').val();
+        srno = $('#txt_SerialNO').val();
+        prc = $('#txt_Price').val();
+
+        if (Pnme != '' && apl != '' && doR != '' && srno != '') {
+            $('#lblerrorUsername').html('')
+            var isValidCheck = $('#form_basic_validation')[0].checkValidity();
+            if (isValidCheck) {
+                event.preventDefault();
+                var t = {
+
+                    "Appintmnt_id": $('#EditID').val(),
+                    "Applince_Id": apl,
+                    "Part_Name": Pnme,
+                    "P_SerialNo": srno,
+                    "Price": prc,
+                    "Replace_Date": doR,
+                }
+                $.ajax({
+                    type: "Post",
+                    url: "/admin/Admin/Update_Replace_part",
+                    crossDomain: false,
+                    data: JSON.stringify(t),
+                    contentType: "application/json",
+                    dataType: "Json",
+                    // async: false,
+                    success: function (responce) {
+                        debugger;
+                        if (responce.Description == 'Ok') {
+                            alert('Update Successfully');
+                            location.href = '/Home/Admin_Index'
+                            //location.reload(true);
+                        }
+
+                        //clearSignUpFields();
+                    },
+                    failure: function () {
+                        alert(responce.Description);
+                        // clearSignUpFields();
+                        // alert("Error");
+                    }
+                });
+
+            }
+        }
+        else {
+            //$('#lblerrorUsername').html("All * fields are mandatory");
+            alert("All * fields are mandatory");
+        }
+
+    })
+</script>
+

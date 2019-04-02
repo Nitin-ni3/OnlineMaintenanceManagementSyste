@@ -1,0 +1,299 @@
+﻿
+@{
+    ViewBag.Title = "Appointment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<script src="~/assests/js/jquery.min.js"></script>*@
+@*<script src="~/assests/js/jquery-1.12.4.js"></script>
+<link href="~/assests/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/assests/js/jquery-ui.js"></script>*@
+<section class="page_breadcrumbs ds background_cover overlay_color section_padding_top_75 section_padding_bottom_65">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <h2>Appointment</h2>
+                    <ol class="breadcrumb greylinks">
+                        <li>
+                            <a href="/Home/Index">
+                                Home
+                            </a>
+                        </li>
+                        <li class="active">Appointmentss </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+<section class="content" style="margin:3% 7%">
+    <div class="container">
+        @*<div class="page-heading">
+            <h1>Appointment</h1>
+            <ol class="breadcrumb">
+                <li><a href="#">Home/Registration/Add Zone</a></li>
+                @*<li><a href="javascript:void(0);">Forms</a></li>
+                    <li class="active">Basic Form Elements</li>
+            </ol>
+        </div>*@
+        <div class="page-body clearfix">
+            <div class="panel panel-default panel-collapse">
+                <div class="panel-body">
+                    <form id="form_basic_validation">
+                        <input id="EditID" type="hidden" />
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <input id="Editid" type="hidden" />
+                                <label>Name :</label>
+                                <input id="txt_Name" type="text" class="form-control" autocomplete="off" name="Name" placeholder="Enter Your Name" readonly />
+                            </div>
+                            <div class="col-sm-2">
+                                <label>Contact :</label>
+                                <input id="txt_Contact" type="text" class="form-control" autocomplete="off" onkeypress="return isNumberKey(event)"  name="Contact" placeholder="Enter Contact " readonly />
+                            </div>
+                            <div class="col-sm-3">
+                                <label>Email :</label>
+                                <input id="txt_Email" type="text" class="form-control" autocomplete="off" name="Email" placeholder="Enter Email Id " readonly />
+                            </div>
+                            <div class="col-sm-2">
+                                <label>Pin Code:</label>
+                                <input id="txt_PinCode" type="text" class="form-control" autocomplete="off" onkeypress="return isNumberKey(event)"  name="ZoneCode" placeholder="Enter Pin Code " readonly />
+                            </div>
+                            <div class="col-sm-2">
+                                <label>Brand :</label>
+                                <input id="txt_Brand" type="text" class="form-control" autocomplete="off" name="Brand" placeholder="Enter Brand Name" required />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                      
+                            <div class="col-sm-3">
+                                <label>Appliance :</label>
+                                <select id="dd_Appliance" name="ddAppliance" class="form-control" required>
+                                    <option value="">--Select--</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <label>Date of Purchase :</label>
+                                <input id="txt_DateofPur" type="text"  class="form-control" onkeypress="return isNumberKey(event)" autocomplete="off" name="DoP" placeholder="Date of Purchase " required />
+                            </div>
+                            <div class="col-sm-2">
+                                <label>Serial No.:</label>
+                                <input id="txt_SerialNo" type="text" class="form-control"  autocomplete="off" name="SerialNo" placeholder="Enter Serial No." required />
+                            </div>
+                            <div class="col-sm-2">
+                                <label>Price:</label>
+                                <input id="txt_Price" type="text" class="form-control" onkeypress="return isNumberKey(event)" autocomplete="off" name="Price" placeholder="Enter Price " required />
+                            </div>
+                            <div class="col-sm-3">
+                                <label>Appointment Date :</label>
+                                <input id="txt_ApintmntDate" type="text" class="form-control" onkeypress="return isNumberKey(event)" autocomplete="off" name="AppointmentDate" placeholder="Select Appointment Date" required />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label>Problem :</label>
+                                <textarea id="txt_problem" class="form-control no-resize" name="problem" cols="10" rows="4" autocomplete="off" placeholder="problem ..... !!" required></textarea>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Address :</label>
+                                <textarea id="txt_Address" class="form-control no-resize" name="Address" cols="10" rows="4" autocomplete="off" placeholder="Address ..... !!" readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12"><input id="btnAppointment" class="btn" type="submit" value="Appointment"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $(function () {
+        GetProfile();
+        LoadApplinces();
+        $('#txt_DateofPur').datepicker({
+            dateFormat: "dd-M-yy",
+            yearRange: "-100:+0",
+            inline: true,
+            showAnim: 'fadeIn',
+            changeMonth: true,
+            changeYear: true,
+            onSelect: function () {
+                var selected = $(this).val();
+                var date = new Date();
+                var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+                     "Aug", "Sep", "Oct", "Nov", "Ded"];
+                var val = date.getDate() + "-" + months[date.getMonth()] + "-" + date.getFullYear();
+                showDays(val,selected);
+            }
+        });
+        $('#txt_ApintmntDate').datepicker({
+            dateFormat: "dd-M-yy",
+            yearRange: "-100:+0",
+            inline: true,
+            showAnim: 'fadeIn',
+            changeMonth: true,
+            changeYear: true,
+            minDate: 1,
+        });
+    })
+    var wrr_stts
+    function showDays(firstDate, secondDate) {
+
+        debugger;
+
+        var startDay = new Date(firstDate);
+        var endDay = new Date(secondDate);
+        var millisecondsPerDay = 1000 * 60 * 60 * 24;
+
+        var millisBetween = startDay.getTime() - endDay.getTime();
+        var days = millisBetween / millisecondsPerDay;
+
+        // Round down.
+        if (Math.floor(days) > 365)
+        {
+            alert("Your warranty is expired. All services now charged");
+            wrr_stts = "Expired";
+        }
+        else {
+            wrr_stts = "In Warranty";
+        }
+
+    }
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 46 || charCode > 57))
+            return false;
+
+        return true;
+    }
+    function GetProfile() {
+        
+        var ReqID = '@Request.RequestContext.HttpContext.Session["Username"]';
+        var t = {
+            "Email": ReqID
+        }
+        $.ajax({
+            type: "POST",
+            url: "/Customer/UserAction/User_Details",
+            contentType: "application/json",
+            data: JSON.stringify(t),
+            dataType: "json",
+            success: function (responce) {
+                
+                var res = responce.Data
+               
+                $('#txt_Name').val(res[0].Name);
+                $('#txt_Contact').val(res[0].Contact);
+                $('#txt_PinCode').val(res[0].Pin_Code);
+                $('#txt_Email').val(res[0].Email);
+                $('#txt_Address').val(res[0].Address);
+                 $('#Editid').val(res[0].U_ID);
+
+            },
+            error: function (responce) {
+            }
+        });
+    }
+    function LoadApplinces(ReqTypeId) {
+        debugger;
+        var t = {
+            "action": "Select"
+        }
+        $.ajax({
+            type: "POST",
+            url: "/Customer/UserAction/GetApplinces",
+            crossDomain: false,
+            data: JSON.stringify(t),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (responce) {
+                debugger;
+                var res = responce.Data;
+                console.log(res);
+                var list = "";
+                list += '<option value="">--Select--</option>';
+                var id;
+                for (var i = 0; i < res.length; i++) {
+
+                    list += '<option value="' + res[i].id + '">' + res[i].Product_Name + '</option>';
+                }
+                $('#dd_Appliance').html(list);
+                if (ReqTypeId != undefined && ReqTypeId != null && ReqTypeId != '') {
+                    $('#dd_Appliance').val(ReqTypeId);
+                }
+
+            },
+            failure: function (responce) {
+                alert(responce.alert);
+
+            }
+        });
+    }
+    $('#btnAppointment').on('click', function () {
+
+        var eml, brd, nme, cont, addr, pinc,apl,dop,srno,prc,prbl,ap_date;
+        nme = $('#txt_Name').val();
+        cont = $('#txt_Contact').val();
+        eml = $('#txt_Email').val();
+        pinc = $('#txt_PinCode').val();
+        brd = $('#txt_Brand').val();
+        apl = $('#dd_Appliance').val();
+        dop = $('#txt_DateofPur').val();
+        srno = $('#txt_SerialNo').val();
+        prc = $('#txt_Price').val();
+        prbl = $('#txt_problem').val();
+        addr = $('#txt_Address').val();
+        ap_date = $('#txt_DateofPur').val();
+        
+       
+        if (eml != '' && brd != '' && nme != '' && cont != '' && addr != '' && pinc != '' && apl != '' && dop != '' && srno != '' && prc != '' && prbl != '' && ap_date!='') {
+            $('#lblerrorUsername').html('')
+            var isValidCheck = $('#form_basic_validation')[0].checkValidity();
+            if (isValidCheck) {
+                event.preventDefault();
+                var t = {
+
+                    "Customer_Id" :$('#Editid').val(),
+                    "Brand" :brd,
+                    "Applinces_Id" :apl,
+                    "D_OF_P" :dop,
+                    "Serial_NO" :srno,
+                    "price": prc,
+                    "problem": prbl,
+                    "warranty_statuse": wrr_stts,
+                    "Appnt_Date": ap_date
+                }
+                $.ajax({
+                    type: "Post",
+                    url: "/Customer/UserAction/Appointment_Applay",
+                    crossDomain: false,
+                    data: JSON.stringify(t),
+                    contentType: "application/json",
+                    dataType: "Json",
+                    // async: false,
+                    success: function (responce) {
+                        debugger;
+                        if (responce.Description == 'OK') {
+                            alert('We contact you soon...!!!');
+                     //       location.href = '../Home/Index'
+                            location.reload(true);
+                        }
+                        
+                        //clearSignUpFields();
+                    },
+                    failure: function () {
+                        alert(responce.Description);
+                       // clearSignUpFields();
+                        // alert("Error");
+                    }
+                });
+
+            }
+        }
+        else {
+            //$('#lblerrorUsername').html("All * fields are mandatory");
+            alert("All * fields are mandatory");
+        }
+
+    })
+</script>

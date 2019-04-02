@@ -1,0 +1,32 @@
+﻿.LogContainer{
+    box-shadow:16px -12px 114.83px 29.17px rgba(0,0,0,.05);
+    margin:3% 8% 10% 8%;
+    padding:5%;
+}
+  /*.btn_login{
+   position: relative;
+    width: 70%;
+    margin: 3% 14%;
+    background-color: #ff3115;
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+    border: none;
+    height: 50px;
+   line-height: 39px;
+    text-align: center;
+   transition: 0.4s;
+    -webkit-transition: 0.4s;
+    -ms-transition: 0.4s;
+    cursor: pointer;
+}*/
+/*.btn_login:hover {
+border: none;
+     background-color:#ffb200;
+    box-shadow:5px 5px 5px 5px rgba(0,0,0,.05);; 
+}*/
+.Anchor-Create-acc{
+    color:darkgray;
+    margin:10% 0 0 -5%;
+    float:left;
+}

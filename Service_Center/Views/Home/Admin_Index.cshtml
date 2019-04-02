@@ -1,0 +1,347 @@
+﻿
+@{
+    ViewBag.Title = "Admin_Index";
+    Layout = "~/Views/Shared/AdminView.cshtml";
+}
+
+
+<section class="page_breadcrumbs ds background_cover overlay_color section_padding_top_75 section_padding_bottom_65">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <h2>Dashboard</h2>
+                <ol class="breadcrumb greylinks">
+                    <li class="active">Dashboard</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="~/assests/js/jquery.min.js"></script>
+<section>
+    <div class="page-body clearfix">
+        <div class="panel panel-default panel-collapse">
+            <div class="panel-body">
+                <form id="form_basic_validation" class="sli">
+                    <input id="EditID" type="hidden" />
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label>Name :</label>
+                            <input id="txt_Name" type="text" class="form-control" autocomplete="off" name="Name" placeholder="Enter Your Name" readonly />
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Contact :</label>
+                            <input id="txt_Contact" type="text" class="form-control" autocomplete="off" onkeypress="return isNumberKey(event)" name="Contact" placeholder="Enter Zone Code " readonly />
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Email :</label>
+                            <input id="txt_Email" type="text" class="form-control" autocomplete="off" name="Email" placeholder="Enter Zone Code " readonly />
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Pin Code:</label>
+                            <input id="txt_PinCode" type="text" class="form-control" autocomplete="off" onkeypress="return isNumberKey(event)" name="ZoneCode" placeholder="Enter Zone Code " readonly />
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Brand :</label>
+                            <input id="txt_Brand" type="text" class="form-control" autocomplete="off" name="Brand" placeholder="Enter Brand Name" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+
+                        <div class="col-sm-3">
+                            <label>Appliance :</label>
+                            <select id="dd_Appliance" name="ddAppliance" class="form-control" readonly>
+                                <option value="">--Select--</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Date of Purchase :</label>
+                            <input id="txt_DateofPur" type="text" class="form-control" onkeypress="return isNumberKey(event)" autocomplete="off" name="DoP" placeholder="Date of Purchase " readonly />
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Serial No.:</label>
+                            <input id="txt_SerialNo" type="text" class="form-control" autocomplete="off" name="SerialNo" placeholder="Enter Serial No." readonly />
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Price:</label>
+                            <input id="txt_Price" type="text" class="form-control" onkeypress="return isNumberKey(event)" autocomplete="off" name="Price" placeholder="Enter Price " readonly />
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Appointment Date :</label>
+                            <input id="txt_ApintmntDate" type="text" class="form-control" onkeypress="return isNumberKey(event)" autocomplete="off" name="AppointmentDate" placeholder="Select Appointment Date" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label>Problem :</label>
+                            <textarea id="txt_problem" class="form-control no-resize" name="problem" cols="10" rows="4" autocomplete="off" placeholder="problem ..... !!" readonly></textarea>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Address :</label>
+                            <textarea id="txt_Address" class="form-control no-resize" name="Address" cols="10" rows="4" autocomplete="off" placeholder="Address ..... !!" readonly></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label>Engineer :</label>
+                            <select id="dd_Executive" name="ddExecutive" class="form-control" required>
+                                <option value="">--Select--</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-3"></div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12"><input id="btnAssign" class="btn" type="submit" value="Assign"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="page-body clearfix">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <div class="row" style="margin-left: 5px; margin-right: 5px;display: block;">
+                            <div class="table-responsive" style="overflow-x:hidden">
+                                <table id="tblAppointment" class="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <td>#</td>
+                                            <th>Name</th>
+                                            <th>Product Comp.</th>
+                                            <th>Product Name</th>
+                                            <th>Serial No</th>
+                                            <th>Price</th>
+                                            <th>Problem</th>
+                                            <th>Warranty Status</th>
+                                            <th>Status</th>
+                                            <th>Assign Engineer</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tblAppointmentBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $(function () {
+        GetAppointment()
+        LoadEngineer();
+        $('.sli').hide();
+    })
+    function GetAppointment() {
+        debugger;
+        var t = {
+            "action": "AllAppointment"
+        }
+        $.ajax({
+            type: "POST",
+            url: "/admin/Admin/GetAppointment_List",
+            contentType: "application/json",
+            data: JSON.stringify(t),
+            dataType: "json",
+            success: function (responce) {
+                debugger;
+                getdata = responce.data;
+                var list;;
+                $("#tblAppointment").dataTable().fnDestroy();
+                $("#tblAppointmentBody").empty();
+                for (var i = 0; i < getdata.length; i++) {
+                    list = "";
+                    list += '<tr>'
+                    list += '<td>' + (i + 1) + ''
+                    list += '</td>'
+                    list += '<td>' + getdata[i].Name + ''
+                    list += '</td>'
+                    list += '<td>' + getdata[i].Brand + ''
+                    list += '</td>'
+                    list += '<td>' + getdata[i].Product_Name + ''
+                    list += '</td>'
+                    list += '<td>' + getdata[i].Serial_No + ''
+                    list += '</td>'
+                    list += '<td>' + getdata[i].Price + ''
+                    list += '</td>'
+                    list += '<td>' + getdata[i].Problem + ''
+                    list += '</td>'
+                    list += '<td>' + getdata[i].Warranty_Status + ''
+                    list += '</td>'
+                    if (getdata[i].status == true) {
+                        list += '<td> Pending'
+                    }
+                    else {
+                        list += '<td> Start'
+                    }
+                   
+                    list += '</td>'
+                    if (getdata[i].Engineer_Name == "") {
+                      list += '<td><a id="' + getdata[i].Id + '" style="cursor: pointer"  title="Edit" onclick="LoadProfile(this.id)"><i class="fa fa-pencil-square-o" style="font-size:30px;color:#16a085;" aria-hidden="true"></i></a></td>'
+                      }
+                      else {
+                        list += '<td><h6> Assigned</h6></td>'
+                      }
+                    
+                    list += '</tr>'
+                    $("#tblAppointmentBody").append(list);
+                }
+
+
+                $('#tblAppointment').dataTable({
+                    responsive: true
+                });
+            },
+            error: function (responce) {
+            }
+        });
+    }
+    function LoadProfile(ReqID) {
+        
+        var t = {
+            "Id": ReqID
+        }
+        $.ajax({
+            type: "POST",
+            url: "/admin/Admin/GetAppointment_ListById",
+            contentType: "application/json",
+            data: JSON.stringify(t),
+            dataType: "json",
+            success: function (responce) {
+                $(".sli").show("slide", { direction: "right" }, 2000);
+                var res = responce.data
+                             
+                $('#txt_Name').val(res[0].Name);
+                $('#txt_Contact').val(res[0].Contact);
+                $('#txt_Email').val(res[0].EmailID);
+                $('#txt_PinCode').val(res[0].PinCode);
+                $('#txt_Brand').val(res[0].Brand);
+                $('#txt_DateofPur').val(res[0].D_Of_P);
+                  LoadApplinces(res[0].Product_Id);
+                  $('#txt_SerialNo').val(res[0].Serial_No);
+                  $('#txt_Price').val(res[0].Price);
+                  $('#txt_ApintmntDate').val(res[0].Appnt_Date);
+                  $('#txt_problem').val(res[0].Problem);
+                  $('#txt_Address').val(res[0].Address);
+                $('#EditID').val(res[0].Id);
+
+            },
+            error: function (responce) {
+            }
+        });
+    }
+    function LoadApplinces(ReqTypeId) {
+        
+        var t = {
+            "action": "Select"
+        }
+        $.ajax({
+            type: "POST",
+            url: "/Customer/UserAction/GetApplinces",
+            crossDomain: false,
+            data: JSON.stringify(t),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (responce) {
+                
+                var res = responce.Data;
+                console.log(res);
+                var list = "";
+                list += '<option value="">--Select--</option>';
+                var id;
+                for (var i = 0; i < res.length; i++) {
+
+                    list += '<option value="' + res[i].id + '">' + res[i].Product_Name + '</option>';
+                }
+                $('#dd_Appliance').html(list);
+                if (ReqTypeId != undefined && ReqTypeId != null && ReqTypeId != '') {
+                    $('#dd_Appliance').val(ReqTypeId);
+                }
+
+            },
+            failure: function (responce) {
+                alert(responce.alert);
+
+            }
+        });
+    }
+    function LoadEngineer(ReqTypeId) {
+        
+        var t = {
+            "action": "Select"
+        }
+        $.ajax({
+            type: "POST",
+            url: "/admin/Engineers/enginners_list",
+            crossDomain: false,
+            data: JSON.stringify(t),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (responce) {
+                
+                var res = responce.data;
+                console.log(res);
+                var list = "";
+                list += '<option value="">--Select--</option>';
+                var id;
+                for (var i = 0; i < res.length; i++) {
+
+                    list += '<option value="' + res[i].Id + '">' + res[i].e_name + '</option>';
+                }
+                $('#dd_Executive').html(list);
+                if (ReqTypeId != undefined && ReqTypeId != null && ReqTypeId != '') {
+                    $('#dd_Executive').val(ReqTypeId);
+                }
+
+            },
+            failure: function (responce) {
+                alert(responce.alert);
+
+            }
+        });
+    }
+    $('#btnAssign').on('click', function () {
+        
+        var engi;
+        engi = $('#dd_Executive').val();
+
+
+        if (engi != '') {
+            var isValidCheck = $('#form_basic_validation')[0].checkValidity();
+            if (isValidCheck) {
+                event.preventDefault();
+                var t = {
+                    "Id":$('#EditID').val(),
+                    "Engineer_id": engi,
+                }
+                $.ajax({
+                    type: "Post",
+                    url: "/admin/Admin/Assign_Engineer",
+                    crossDomain: false,
+                    data: JSON.stringify(t),
+                    contentType: "application/json",
+                    dataType: "Json",
+                    // async: false,
+                    success: function (responce) {
+                        
+                            alert(responce.Description);
+                            location.href = '/Home/Admin_Index'
+                    },
+                    failure: function () {
+                        alert(responce.Description);
+                    }
+                });
+            }
+        }
+        else {
+            alert("Please Select Engineer");
+        }
+
+    })
+</script>
